@@ -1,0 +1,42 @@
+{% extends 'catalog/base_generic.html' %}
+
+{% block title %}
+    <title>Author Detail</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Author Detail</h1>
+    <ul>
+        <li><strong>First Name:</strong> {{ author.first_name }}</li>
+        <li><strong>Last Name:</strong> {{ author.last_name }}</li>
+        <li><strong>Date of Birth:</strong> {{ author.date_of_birth }}</li>
+        {% if author.date_of_death %}
+            <li><strong>Date of Death:</strong> {{ author.date_of_death }}</li>
+        {% endif %}
+    </ul>
+
+    <h2>Books</h2>
+    {% if author.book_set.all %}
+        <table>
+        <tr>
+            <th>Title</th>
+            <th>Summary</th>
+            <th>isbn</th>
+            <th>genre</th>
+            <th>language</th>
+        </tr>
+        {% for book in author.book_set.all %}
+        <tr>
+            <th><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></th>
+            <td>{{ book.summary }}</td>
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.display_genre }}</td>
+            <td>{{ book.language }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p>There are no books in the library.</p>
+    {% endif %}
+
+{% endblock %}

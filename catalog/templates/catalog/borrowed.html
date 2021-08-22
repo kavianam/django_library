@@ -1,0 +1,32 @@
+{% extends 'catalog/base_generic.html' %}
+
+{% block title %}
+    <title>Return Book</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Borrowed Books</h1>
+    {% if book_instances %}
+        <ul>
+            {% for book_instance in book_instances %}
+                <li><a href="{{ book_instance.book.get_absolute_url }}">{{ book_instance.book }}</a>
+                    <span class="{% if book_instance.is_overdue %}text-danger{% endif %}">({{ book_instance.borrower }}, {{ book_instance.due_back }})</span>
+                     - {{ book_instance.id }}</li>
+            {% endfor %}
+            </ul>
+    {% else %}
+        <p>No one borrowed any book.</p>
+    {% endif %}
+    <hr>
+    <form method="post" action="{% url 'all-borrowed' %}">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+{#        <div class="form-group">#}
+{#            <label for="id-instance-pk">Book Instance ID to be returned</label>#}
+{#            <input type="text" class="form-control" id="id-instance-pk" name="pk">#}
+{#        </div>#}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

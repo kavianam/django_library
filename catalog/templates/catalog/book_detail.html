@@ -1,0 +1,73 @@
+{% extends 'catalog/base_generic.html' %}
+
+{% block title %}
+    <title>Books Detail</title>
+{% endblock %}
+
+{% block content %}
+  <h1>Title: {{ book.title }}</h1>
+
+  <p><strong>Author:</strong> <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a></p>
+{#  <p><strong>Author:</strong> <a href="{% url 'author-detail' book.author.id %}">{{ book.author }}</a></p>#}
+  <p><strong>Summary:</strong> {{ book.summary }}</p>
+  <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+  <p><strong>Language:</strong> {{ book.language }}</p>
+  <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Copies</h4>
+
+    {% if book.bookinstance_set.all %}
+    {% for copy in book.bookinstance_set.all %}
+      <hr>
+      <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+        {{ copy.get_status_display }}
+      </p>
+      {% if copy.status != 'a' %}
+        <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
+      {% endif %}
+      <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
+      <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+    {% endfor %}
+    {% else %}
+        <p>There are no copies in the library.</p>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{#{% block content %}#}
+{#    <h1>{{ book.title }}</h1>#}
+{#    <ul>#}
+{#        <li>#}
+{#            <strong>Author:</strong>#}
+{#            <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a>#}
+{#        </li>#}
+{#        <li><strong>Summary:</strong> {{ book.summary }}</li>#}
+{#        <li><strong>ISBN:</strong> {{ book.isbn }}</li>#}
+{#        <li><strong>Genre:</strong> {{ book.display_genre }}</li>#}
+{#        <li><strong>Language:</strong> {{ book.language }}</li>#}
+{#    </ul>#}
+{##}
+{#    <h2>Copies</h2>#}
+{#    {% if book.bookinstance_set.all %}#}
+{#    <table>#}
+{#        <tr>#}
+{#            <th>ID</th>#}
+{#            <th>Due Back</th>#}
+{#            <th>Status</th>#}
+{#            <th>Imprint</th>#}
+{#            <th>Borrower</th>#}
+{#        </tr>#}
+{#        {% for copy in book.bookinstance_set.all %}#}
+{#        <tr>#}
+{#            <td>{{ copy.id }}</td>#}
+{#            <td>{{ copy.due_back }}</td>#}
+{#            <td>{{ copy.get_status_display }}</td>#}
+{#            <td>{{ copy.imprint }}</td>#}
+{#            <td>{{ copy.borrower }}</td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
+{#    {% else %}#}
+{#        <p>There are no copies in the library.</p>#}
+{#{% endblock %}#}
